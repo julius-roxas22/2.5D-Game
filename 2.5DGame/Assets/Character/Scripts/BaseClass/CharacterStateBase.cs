@@ -34,7 +34,7 @@ namespace IndieGamePractice
             }
         }
 
-        public CharacterControl GetCharacterControl(Animator animator)
+        public CharacterControl _GetCharacterControl(Animator animator)
         {
             if (null == characterControl)
             {

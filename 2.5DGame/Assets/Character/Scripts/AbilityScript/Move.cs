@@ -8,6 +8,9 @@ namespace IndieGamePractice
     public class Move : StateData
     {
         [SerializeField] private float movementSpeed;
+        [SerializeField] private float blockDistance;
+        [SerializeField] private AnimationCurve speedGraph;
+
         public override void _OnEnterAbility(CharacterStateBase characterStateBase, Animator animator, AnimatorStateInfo animatorStateInfo)
         {
 
@@ -15,34 +18,61 @@ namespace IndieGamePractice
 
         public override void _OnUpdateAbility(CharacterStateBase characterStateBase, Animator animator, AnimatorStateInfo animatorStateInfo)
         {
-            if (VirtualInputManager._GetInstance._MoveRight && VirtualInputManager._GetInstance._MoveLeft)
+            CharacterControl control = characterStateBase._GetCharacterControl(animator);
+
+            if (control._Jump)
+            {
+                animator.SetBool(TransitionParameters.Jump.ToString(), true);
+            }
+
+            if (control._MoveRight && control._MoveLeft)
             {
                 animator.SetBool(TransitionParameters.Move.ToString(), false);
                 return;
             }
 
-            if (!VirtualInputManager._GetInstance._MoveRight && !VirtualInputManager._GetInstance._MoveLeft)
+            if (!control._MoveRight && !control._MoveLeft)
             {
                 animator.SetBool(TransitionParameters.Move.ToString(), false);
                 return;
             }
 
-            if (VirtualInputManager._GetInstance._MoveRight)
+            if (control._MoveRight)
             {
-                characterStateBase.GetCharacterControl(animator).transform.Translate(Vector3.forward * movementSpeed * Time.deltaTime);
-                characterStateBase.GetCharacterControl(animator).transform.rotation = Quaternion.Euler(0f, 0, 0f);
+                if (!checkFront(control))
+                {
+                    control.transform.Translate(Vector3.forward * movementSpeed * speedGraph.Evaluate(animatorStateInfo.normalizedTime) * Time.deltaTime);
+                }
+                control.transform.rotation = Quaternion.Euler(0f, 0, 0f);
             }
 
-            if (VirtualInputManager._GetInstance._MoveLeft)
+            if (control._MoveLeft)
             {
-                characterStateBase.GetCharacterControl(animator).transform.Translate(Vector3.forward * movementSpeed * Time.deltaTime);
-                characterStateBase.GetCharacterControl(animator).transform.rotation = Quaternion.Euler(0f, 180, 0f);
+                if (!checkFront(control))
+                {
+                    control.transform.Translate(Vector3.forward * movementSpeed * speedGraph.Evaluate(animatorStateInfo.normalizedTime) * Time.deltaTime);
+                }
+                control.transform.rotation = Quaternion.Euler(0f, 180, 0f);
             }
         }
 
         public override void _OnExitAbility(CharacterStateBase characterStateBase, Animator animator, AnimatorStateInfo animatorStateInfo)
         {
 
+        }
+
+        private bool checkFront(CharacterControl control)
+        {
+            foreach (GameObject obj in control._FrontSpheres)
+            {
+                Debug.DrawRay(obj.transform.position, control.transform.forward * blockDistance, Color.red);
+                if (Physics.Raycast(obj.transform.position, control.transform.forward, out RaycastHit hit, blockDistance))
+                {
+                    return true;
+                }
+            }
+
+            return false;
         }
     }
 }

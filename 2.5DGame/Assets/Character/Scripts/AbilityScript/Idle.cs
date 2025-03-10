@@ -9,23 +9,30 @@ namespace IndieGamePractice
     {
         public override void _OnEnterAbility(CharacterStateBase characterStateBase, Animator animator, AnimatorStateInfo animatorStateInfo)
         {
-
+            animator.SetBool(TransitionParameters.Jump.ToString(), false);
         }
 
         public override void _OnUpdateAbility(CharacterStateBase characterStateBase, Animator animator, AnimatorStateInfo animatorStateInfo)
         {
-            if (VirtualInputManager._GetInstance._MoveRight && VirtualInputManager._GetInstance._MoveLeft)
+            CharacterControl control = characterStateBase._GetCharacterControl(animator);
+
+            if (control._MoveRight && control._MoveLeft)
             {
                 animator.SetBool(TransitionParameters.Move.ToString(), false);
                 return;
             }
 
-            if (VirtualInputManager._GetInstance._MoveRight)
+            if (control._Jump)
+            {
+                animator.SetBool(TransitionParameters.Jump.ToString(), true);
+            }
+
+            if (control._MoveRight)
             {
                 animator.SetBool(TransitionParameters.Move.ToString(), true);
             }
 
-            if (VirtualInputManager._GetInstance._MoveLeft)
+            if (control._MoveLeft)
             {
                 animator.SetBool(TransitionParameters.Move.ToString(), true);
             }
