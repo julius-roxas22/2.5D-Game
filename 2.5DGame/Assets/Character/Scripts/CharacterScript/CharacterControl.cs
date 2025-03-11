@@ -18,9 +18,12 @@ namespace IndieGamePractice
         public List<GameObject> _BottomSpheres = new List<GameObject>();
         public List<GameObject> _FrontSpheres = new List<GameObject>();
 
-        public bool _MoveRight;
-        public bool _MoveLeft;
-        public bool _Jump;
+        [HideInInspector] public bool _MoveRight;
+        [HideInInspector] public bool _MoveLeft;
+        [HideInInspector] public bool _Jump;
+
+        [HideInInspector] public float _GravityMultiplier;
+        [HideInInspector] public float _PullMultiplier;
 
         private Rigidbody rigidBody;
 
@@ -39,6 +42,21 @@ namespace IndieGamePractice
         private void Awake()
         {
             createSphereEdge();
+        }
+
+        private void FixedUpdate()
+        {
+            if (_GetRigidBody.velocity.y < 0f)
+            {
+                //_GetRigidBody.velocity -= Vector3.up * _GravityMultiplier;
+                _GetRigidBody.velocity += Vector3.down * _GravityMultiplier;
+            }
+
+            if (_GetRigidBody.velocity.y > 0f && !_Jump)
+            {
+                //_GetRigidBody.velocity -= Vector3.up * _PullMultiplier;
+                _GetRigidBody.velocity += Vector3.down * _PullMultiplier;
+            }
         }
 
         private void createSphereEdge()

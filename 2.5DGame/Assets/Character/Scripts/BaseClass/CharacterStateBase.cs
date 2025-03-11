@@ -8,7 +8,7 @@ namespace IndieGamePractice
     public class CharacterStateBase : StateMachineBehaviour
     {
         private CharacterControl characterControl;
-        public List<StateData> allAbilitiesData = new List<StateData>();
+        [SerializeField] private List<StateData> allAbilitiesData = new List<StateData>();
 
         public override void OnStateEnter(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
         {

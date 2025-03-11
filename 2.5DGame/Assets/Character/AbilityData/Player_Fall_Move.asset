@@ -10,9 +10,9 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: d84d54107d22e364ba74d9cf3f8fbcde, type: 3}
-  m_Name: Player_Move
+  m_Name: Player_Fall_Move
   m_EditorClassIdentifier: 
-  movementSpeed: 1.6
+  movementSpeed: 1
   blockDistance: 0.5
   speedGraph:
     serializedVersion: 2

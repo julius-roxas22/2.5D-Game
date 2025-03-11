@@ -8,6 +8,8 @@ namespace IndieGamePractice
     public class Jump : StateData
     {
         [SerializeField] private float jumpForce;
+        [SerializeField] private AnimationCurve gravity;
+        [SerializeField] private AnimationCurve pull;
 
         public override void _OnEnterAbility(CharacterStateBase characterStateBase, Animator animator, AnimatorStateInfo animatorStateInfo)
         {
@@ -17,7 +19,9 @@ namespace IndieGamePractice
 
         public override void _OnUpdateAbility(CharacterStateBase characterStateBase, Animator animator, AnimatorStateInfo animatorStateInfo)
         {
-
+            CharacterControl control = characterStateBase._GetCharacterControl(animator);
+            control._GravityMultiplier = gravity.Evaluate(animatorStateInfo.normalizedTime);
+            control._PullMultiplier = pull.Evaluate(animatorStateInfo.normalizedTime);
         }
 
         public override void _OnExitAbility(CharacterStateBase characterStateBase, Animator animator, AnimatorStateInfo animatorStateInfo)

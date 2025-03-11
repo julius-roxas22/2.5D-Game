@@ -13,6 +13,7 @@ MonoBehaviour:
   m_Name: Player_JumpNormal_Move
   m_EditorClassIdentifier: 
   movementSpeed: 1.5
+  blockDistance: 0.5
   speedGraph:
     serializedVersion: 2
     m_Curve:
