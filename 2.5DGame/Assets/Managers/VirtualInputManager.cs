@@ -9,5 +9,6 @@ namespace IndieGamePractice
         public bool _MoveRight;
         public bool _MoveLeft;
         public bool _Jump;
+        public bool _Attack;
     }
 }

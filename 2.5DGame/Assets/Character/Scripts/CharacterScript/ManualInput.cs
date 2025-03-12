@@ -17,6 +17,7 @@ namespace IndieGamePractice
             control._MoveRight = VirtualInputManager._GetInstance._MoveRight;
             control._MoveLeft = VirtualInputManager._GetInstance._MoveLeft;
             control._Jump = VirtualInputManager._GetInstance._Jump;
+            control._Attack = VirtualInputManager._GetInstance._Attack;
         }
     }
 

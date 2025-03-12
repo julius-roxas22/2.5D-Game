@@ -9,7 +9,8 @@ namespace IndieGamePractice
         Move,
         Jump,
         ForceTransition,
-        Grounded
+        Grounded,
+        Attack,
     }
 
     public class CharacterControl : MonoBehaviour
@@ -17,10 +18,12 @@ namespace IndieGamePractice
         public Animator _SkinnedMesh;
         public List<GameObject> _BottomSpheres = new List<GameObject>();
         public List<GameObject> _FrontSpheres = new List<GameObject>();
+        public List<Collider> _RagdollParts = new List<Collider>();
 
         [HideInInspector] public bool _MoveRight;
         [HideInInspector] public bool _MoveLeft;
         [HideInInspector] public bool _Jump;
+        [HideInInspector] public bool _Attack;
 
         [HideInInspector] public float _GravityMultiplier;
         [HideInInspector] public float _PullMultiplier;
@@ -41,6 +44,7 @@ namespace IndieGamePractice
 
         private void Awake()
         {
+            setUpRagdoll();
             createSphereEdge();
         }
 
@@ -56,6 +60,42 @@ namespace IndieGamePractice
             {
                 //_GetRigidBody.velocity -= Vector3.up * _PullMultiplier;
                 _GetRigidBody.velocity += Vector3.down * _PullMultiplier;
+            }
+        }
+
+        private void setUpRagdoll()
+        {
+            Collider[] colliders = GetComponentsInChildren<Collider>();
+
+            foreach (Collider col in colliders)
+            {
+                if (col.gameObject != gameObject)
+                {
+                    col.isTrigger = true;
+                    _RagdollParts.Add(col);
+                }
+            }
+        }
+
+        //private IEnumerator Start()
+        //{
+        //    yield return new WaitForSeconds(4f);
+        //    _GetRigidBody.AddForce(Vector3.up * 400f);
+        //    yield return new WaitForSeconds(0.1f);
+        //    _TurnOnRagdoll();
+        //}
+
+        public void _TurnOnRagdoll()
+        {
+            _GetRigidBody.useGravity = false;
+            _GetRigidBody.velocity = Vector3.zero;
+            GetComponent<BoxCollider>().enabled = false;
+            _SkinnedMesh.enabled = false;
+            _SkinnedMesh.avatar = null;
+            foreach (Collider col in _RagdollParts)
+            {
+                col.isTrigger = false;
+                col.attachedRigidbody.velocity = Vector3.zero;
             }
         }
 
@@ -98,6 +138,11 @@ namespace IndieGamePractice
         {
             GameObject obj = Instantiate(Resources.Load("ColliderEdge", typeof(GameObject)), pos, Quaternion.identity, transform) as GameObject;
             return obj;
+        }
+
+        public void _CharacterMove(float movementSpeed , float speedGraph)
+        {
+            transform.Translate(Vector3.forward * movementSpeed * speedGraph * Time.deltaTime);
         }
     }
 }

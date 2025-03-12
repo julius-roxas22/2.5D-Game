@@ -10,6 +10,7 @@ namespace IndieGamePractice
         [SerializeField] private float movementSpeed;
         [SerializeField] private float blockDistance;
         [SerializeField] private AnimationCurve speedGraph;
+        [SerializeField] private bool constantMoved;
 
         public override void _OnEnterAbility(CharacterStateBase characterStateBase, Animator animator, AnimatorStateInfo animatorStateInfo)
         {
@@ -20,6 +21,31 @@ namespace IndieGamePractice
         {
             CharacterControl control = characterStateBase._GetCharacterControl(animator);
 
+            if (constantMoved)
+            {
+                constantMove(control, animator, animatorStateInfo);
+            }
+            else
+            {
+                controlledMove(control, animator, animatorStateInfo);
+            }
+        }
+
+        public override void _OnExitAbility(CharacterStateBase characterStateBase, Animator animator, AnimatorStateInfo animatorStateInfo)
+        {
+
+        }
+
+        private void constantMove(CharacterControl control, Animator animator, AnimatorStateInfo stateInfo)
+        {
+            if (!checkFront(control))
+            {
+                control._CharacterMove(movementSpeed, speedGraph.Evaluate(stateInfo.normalizedTime));
+            }
+        }
+
+        private void controlledMove(CharacterControl control, Animator animator, AnimatorStateInfo stateInfo)
+        {
             if (control._Jump)
             {
                 animator.SetBool(TransitionParameters.Jump.ToString(), true);
@@ -41,7 +67,7 @@ namespace IndieGamePractice
             {
                 if (!checkFront(control))
                 {
-                    control.transform.Translate(Vector3.forward * movementSpeed * speedGraph.Evaluate(animatorStateInfo.normalizedTime) * Time.deltaTime);
+                    control._CharacterMove(movementSpeed, speedGraph.Evaluate(stateInfo.normalizedTime));
                 }
                 control.transform.rotation = Quaternion.Euler(0f, 0, 0f);
             }
@@ -50,15 +76,10 @@ namespace IndieGamePractice
             {
                 if (!checkFront(control))
                 {
-                    control.transform.Translate(Vector3.forward * movementSpeed * speedGraph.Evaluate(animatorStateInfo.normalizedTime) * Time.deltaTime);
+                    control._CharacterMove(movementSpeed, speedGraph.Evaluate(stateInfo.normalizedTime));
                 }
                 control.transform.rotation = Quaternion.Euler(0f, 180, 0f);
             }
-        }
-
-        public override void _OnExitAbility(CharacterStateBase characterStateBase, Animator animator, AnimatorStateInfo animatorStateInfo)
-        {
-
         }
 
         private bool checkFront(CharacterControl control)
@@ -68,8 +89,36 @@ namespace IndieGamePractice
                 Debug.DrawRay(obj.transform.position, control.transform.forward * blockDistance, Color.red);
                 if (Physics.Raycast(obj.transform.position, control.transform.forward, out RaycastHit hit, blockDistance))
                 {
-                    return true;
+                    if (!control._RagdollParts.Contains(hit.collider))
+                    {
+                        if (!isBodyPart(hit.collider))
+                        {
+                            return true;
+                        }
+                    }
                 }
+            }
+
+            return false;
+        }
+
+        private bool isBodyPart(Collider col)
+        {
+            CharacterControl control = col.transform.root.GetComponent<CharacterControl>();
+
+            if (null == control)
+            {
+                return false;
+            }
+
+            if (control.gameObject == col.gameObject)
+            {
+                return false;
+            }
+
+            if (control._RagdollParts.Contains(col))
+            {
+                return true;
             }
 
             return false;
