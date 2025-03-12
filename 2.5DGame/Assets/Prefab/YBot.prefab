@@ -15,6 +15,7 @@ GameObject:
   - component: {fileID: 318203451898247016}
   - component: {fileID: 6600859262486428400}
   - component: {fileID: 3913478452353410429}
+  - component: {fileID: 7652418023278880375}
   m_Layer: 0
   m_Name: YBot
   m_TagString: Untagged
@@ -152,6 +153,7 @@ MonoBehaviour:
   _BottomSpheres: []
   _FrontSpheres: []
   _RagdollParts: []
+  _CollidingParts: []
   _MoveRight: 0
   _MoveLeft: 0
   _Jump: 0
@@ -168,6 +170,18 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 0feb8b398c02728478efb3559875f01d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &7652418023278880375
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6369664099610999902}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0d2fca6ac22efb34d88982d8673dfa25, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!1001 &422621841303055658

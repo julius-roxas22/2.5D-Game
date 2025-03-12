@@ -19,6 +19,9 @@ namespace IndieGamePractice
         public List<GameObject> _BottomSpheres = new List<GameObject>();
         public List<GameObject> _FrontSpheres = new List<GameObject>();
         public List<Collider> _RagdollParts = new List<Collider>();
+        public List<Collider> _CollidingParts = new List<Collider>();
+
+        private List<TriggerDetector> _AllTriggers = new List<TriggerDetector>();
 
         [HideInInspector] public bool _MoveRight;
         [HideInInspector] public bool _MoveLeft;
@@ -44,8 +47,22 @@ namespace IndieGamePractice
 
         private void Awake()
         {
+            bool switchBack = false;
+
+            if (!_IsFacingForward())
+            {
+                switchBack = true;
+            }
+
+            _FaceForward(true);
+
             setUpRagdoll();
             createSphereEdge();
+
+            if (switchBack)
+            {
+                _FaceForward(false);
+            }
         }
 
         private void FixedUpdate()
@@ -63,6 +80,19 @@ namespace IndieGamePractice
             }
         }
 
+        public List<TriggerDetector> _GetAllTriggers()
+        {
+            TriggerDetector[] triggers = GetComponentsInChildren<TriggerDetector>();
+            foreach (TriggerDetector t in triggers)
+            {
+                if (!_AllTriggers.Contains(t))
+                {
+                    _AllTriggers.Add(t);
+                }
+            }
+            return _AllTriggers;
+        }
+
         private void setUpRagdoll()
         {
             Collider[] colliders = GetComponentsInChildren<Collider>();
@@ -73,17 +103,15 @@ namespace IndieGamePractice
                 {
                     col.isTrigger = true;
                     _RagdollParts.Add(col);
+
+                    if (null == col.GetComponent<TriggerDetector>())
+                    {
+                        col.gameObject.AddComponent<TriggerDetector>();
+                    }
+
                 }
             }
         }
-
-        //private IEnumerator Start()
-        //{
-        //    yield return new WaitForSeconds(4f);
-        //    _GetRigidBody.AddForce(Vector3.up * 400f);
-        //    yield return new WaitForSeconds(0.1f);
-        //    _TurnOnRagdoll();
-        //}
 
         public void _TurnOnRagdoll()
         {
@@ -140,9 +168,33 @@ namespace IndieGamePractice
             return obj;
         }
 
-        public void _CharacterMove(float movementSpeed , float speedGraph)
+        public void _CharacterMove(float movementSpeed, float speedGraph)
         {
             transform.Translate(Vector3.forward * movementSpeed * speedGraph * Time.deltaTime);
+        }
+
+        public bool _IsFacingForward()
+        {
+            if (transform.forward.z > 0f)
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+
+        public void _FaceForward(bool isFacingForward)
+        {
+            if (isFacingForward)
+            {
+                transform.rotation = Quaternion.Euler(0f, 0f, 0f);
+            }
+            else
+            {
+                transform.rotation = Quaternion.Euler(0f, 180f, 0f);
+            }
         }
     }
 }
