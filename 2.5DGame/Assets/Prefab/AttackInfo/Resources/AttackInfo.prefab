@@ -10,6 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4588607159834530364}
   - component: {fileID: 118641710662813558}
+  - component: {fileID: 7904868049011479439}
   m_Layer: 0
   m_Name: AttackInfo
   m_TagString: Untagged
@@ -44,3 +45,27 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 07b940d348f1ad54e9e3f02d1c944c31, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _Attacker: {fileID: 0}
+  _AttackAbility: {fileID: 0}
+  _ColliderNames: []
+  _IsRegistered: 0
+  _IsFinished: 0
+  _MustCollide: 0
+  _MustFaceAttacker: 0
+  _AttackRange: 0
+  _MaxHits: 0
+  _CurrentHits: 0
+--- !u!114 &7904868049011479439
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 319578018952542897}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 07141579e846b884da8b73c9973abe12, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  timeScheduledOff: 5
+  objectType: 0

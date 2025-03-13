@@ -21,10 +21,10 @@ namespace IndieGamePractice
         {
             animator.SetBool(TransitionParameters.Attack.ToString(), false);
 
-            GameObject obj = Instantiate(Resources.Load("AttackInfo", typeof(GameObject))) as GameObject;
-
+            GameObject obj = PoolManager._GetInstance._InstantiateObject(PoolObjectType.AttackInfo);
             AttackInfo info = obj.GetComponent<AttackInfo>();
 
+            obj.SetActive(true);
             info._ResetAttackInfo(this, characterStateBase._GetCharacterControl(animator));
 
             if (!AttackManager._GetInstance._CurrentAttacks.Contains(info))
@@ -77,7 +77,7 @@ namespace IndieGamePractice
                     if (this == info._AttackAbility && !info._IsFinished)
                     {
                         info._IsFinished = true;
-                        Destroy(info.gameObject);
+                        info.GetComponent<PoolObject>()._TurnOff();
                     }
                 }
             }
@@ -89,7 +89,7 @@ namespace IndieGamePractice
 
             foreach (AttackInfo info in AttackManager._GetInstance._CurrentAttacks)
             {
-                if (this == info._AttackAbility && info._IsFinished)
+                if (null == info && info._IsFinished)
                 {
                     _FinishedAttack.Add(info);
                 }

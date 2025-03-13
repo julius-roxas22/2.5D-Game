@@ -40,5 +40,10 @@ namespace IndieGamePractice
             _MaxHits = attackAbility._MaxHits;
             _CurrentHits = 0;
         }
+
+        private void OnDisable()
+        {
+            _IsFinished = true;
+        }
     }
 }
