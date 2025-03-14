@@ -56,7 +56,7 @@ namespace IndieGamePractice
 
             _FaceForward(true);
 
-            setUpRagdoll();
+            //setUpRagdoll();
             createSphereEdge();
 
             if (switchBack)
@@ -93,8 +93,10 @@ namespace IndieGamePractice
             return _AllTriggers;
         }
 
-        private void setUpRagdoll()
+        public void _SetUpRagdoll()
         {
+            _RagdollParts.Clear();
+
             Collider[] colliders = GetComponentsInChildren<Collider>();
 
             foreach (Collider col in colliders)

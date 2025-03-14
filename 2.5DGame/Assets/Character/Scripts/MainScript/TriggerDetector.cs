@@ -4,10 +4,18 @@ using UnityEngine;
 
 namespace IndieGamePractice
 {
+    public enum BodyPart
+    {
+        Upper,
+        Lower,
+        Arm,
+        Leg
+    }
+
     public class TriggerDetector : MonoBehaviour
     {
         public List<Collider> _CollidingParts = new List<Collider>();
-
+        public BodyPart bodyPart;
         private CharacterControl owner;
 
         private void Awake()

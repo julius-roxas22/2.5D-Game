@@ -14,9 +14,9 @@ namespace IndieGamePractice
 
             CharacterControl control = (CharacterControl)target;
 
-            if (GUILayout.Button("Set RagdollParts"))
+            if (GUILayout.Button("Setup RagdollParts"))
             {
-
+                control._SetUpRagdoll();
             }
         }
     }

@@ -14,7 +14,6 @@ namespace IndieGamePractice
         public bool _MustFaceAttacker;
         public float _AttackRange;
         public int _MaxHits;
-        public List<RuntimeAnimatorController> _DeathAnimators = new List<RuntimeAnimatorController>();
         private List<AttackInfo> _FinishedAttack = new List<AttackInfo>();
 
         public override void _OnEnterAbility(CharacterStateBase characterStateBase, Animator animator, AnimatorStateInfo animatorStateInfo)
@@ -102,12 +101,6 @@ namespace IndieGamePractice
                     AttackManager._GetInstance._CurrentAttacks.Remove(info);
                 }
             }
-        }
-
-        public RuntimeAnimatorController _GetDeathAnimator()
-        {
-            int index = Random.Range(0, _DeathAnimators.Count);
-            return _DeathAnimators[index];
         }
     }
 }

@@ -7,6 +7,7 @@ namespace IndieGamePractice
     public class DamageDetector : MonoBehaviour
     {
         private CharacterControl control;
+        private BodyPart damagedBodyPart;
 
         private void Awake()
         {
@@ -70,6 +71,7 @@ namespace IndieGamePractice
                     {
                         if (colNames == col.name)
                         {
+                            damagedBodyPart = trigger.bodyPart;
                             return true;
                         }
                     }
@@ -80,8 +82,8 @@ namespace IndieGamePractice
 
         private void takeDamage(AttackInfo info)
         {
-            Debug.Log(control.name + " hit by " + info._Attacker.name);
-            control._SkinnedMesh.runtimeAnimatorController = info._AttackAbility._GetDeathAnimator();
+            Debug.Log(control.name + " hit by " + info._Attacker.name + " into " + damagedBodyPart.ToString());
+            control._SkinnedMesh.runtimeAnimatorController = DeathAnimationManager._GetInstance._GetDeathController(damagedBodyPart);
             info._CurrentHits++;
             control.GetComponent<BoxCollider>().enabled = false;
             control._GetRigidBody.useGravity = false;
